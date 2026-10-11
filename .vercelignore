@@ -6,5 +6,7 @@
 /.vscode
 /.claude
 /storage/logs/*.log
+/bootstrap/cache/*.php
+/bootstrap/cache/*.tmp
 Homestead.json
 Homestead.yaml
