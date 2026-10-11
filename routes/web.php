@@ -83,6 +83,21 @@ Route::get('/run-migrations', function (\Illuminate\Http\Request $request) {
     }
 
     try {
+        if ($request->has('dbs')) {
+            $dbs = \Illuminate\Support\Facades\DB::select('SHOW DATABASES');
+            return response()->json($dbs);
+        }
+
+        $targetDb = $request->query('db', config('database.connections.mysql.database') === 'sys' ? 'test' : config('database.connections.mysql.database'));
+        try {
+            \Illuminate\Support\Facades\DB::statement("CREATE DATABASE IF NOT EXISTS `{$targetDb}`");
+        } catch (\Throwable $ignored) {
+        }
+
+        \Illuminate\Support\Facades\Config::set('database.connections.mysql.database', $targetDb);
+        \Illuminate\Support\Facades\DB::purge('mysql');
+        \Illuminate\Support\Facades\DB::reconnect('mysql');
+
         \Illuminate\Support\Facades\Artisan::call('migrate', ['--force' => true]);
         $output = \Illuminate\Support\Facades\Artisan::output();
 
@@ -91,7 +106,7 @@ Route::get('/run-migrations', function (\Illuminate\Http\Request $request) {
             $output .= "\n" . \Illuminate\Support\Facades\Artisan::output();
         }
 
-        return response("<pre style='background:#18181b;color:#4ade80;padding:20px;border-radius:8px;font-family:monospace;line-height:1.5;'>{$output}\nMigration / Seed process completed successfully!</pre>");
+        return response("<pre style='background:#18181b;color:#4ade80;padding:20px;border-radius:8px;font-family:monospace;line-height:1.5;'>Active Database: {$targetDb}\n{$output}\nMigration / Seed process completed successfully!</pre>");
     } catch (\Throwable $e) {
         return response("<pre style='background:#18181b;color:#f87171;padding:20px;border-radius:8px;font-family:monospace;line-height:1.5;'>Error: " . $e->getMessage() . "\n" . $e->getTraceAsString() . "</pre>", 500);
     }
