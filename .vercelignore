@@ -1,0 +1,10 @@
+/vendor
+/node_modules
+/.git
+/tests
+/.idea
+/.vscode
+/.claude
+/storage/logs/*.log
+Homestead.json
+Homestead.yaml

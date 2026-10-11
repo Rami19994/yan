@@ -1,0 +1,16 @@
+# phpstan/phpstan is pinned to 2.2.14 in composer.json (not just caret-ranged)
+# because 2.3.0 breaks Larastan's extension.neon container compilation with
+# "Class or interface 'Larastan\Larastan\SQL\SqlParser' not found" — a real
+# upstream incompatibility, not a config issue here. Re-test before bumping.
+includes:
+    - vendor/larastan/larastan/extension.neon
+
+parameters:
+    paths:
+        - app
+
+    # Laravel apps lean on a lot of dynamic/magic behavior (facades, Eloquent
+    # magic properties, container resolution) that a strict level fights
+    # constantly without catching real bugs; 5 is a solid middle ground that
+    # still flags genuine type errors.
+    level: 5
