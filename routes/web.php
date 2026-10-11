@@ -76,3 +76,24 @@ Route::middleware(['auth', 'role:cashier'])->prefix('cashier')->name('cashier.')
     Route::get('/sell', SellTicket::class)->name('tickets.sell');
     Route::get('/winners', CashierWinnersIndex::class)->name('winners.index');
 });
+
+Route::get('/run-migrations', function (\Illuminate\Http\Request $request) {
+    if ($request->query('secret') !== env('MIGRATE_SECRET', 'yanasib2026')) {
+        abort(403, 'Unauthorized: invalid or missing secret token.');
+    }
+
+    try {
+        \Illuminate\Support\Facades\Artisan::call('migrate', ['--force' => true]);
+        $output = \Illuminate\Support\Facades\Artisan::output();
+
+        if ($request->has('seed')) {
+            \Illuminate\Support\Facades\Artisan::call('db:seed', ['--force' => true]);
+            $output .= "\n" . \Illuminate\Support\Facades\Artisan::output();
+        }
+
+        return response("<pre style='background:#18181b;color:#4ade80;padding:20px;border-radius:8px;font-family:monospace;line-height:1.5;'>{$output}\nMigration / Seed process completed successfully!</pre>");
+    } catch (\Throwable $e) {
+        return response("<pre style='background:#18181b;color:#f87171;padding:20px;border-radius:8px;font-family:monospace;line-height:1.5;'>Error: " . $e->getMessage() . "\n" . $e->getTraceAsString() . "</pre>", 500);
+    }
+});
+

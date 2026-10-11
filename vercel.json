@@ -1,13 +1,39 @@
 {
     "version": 2,
-    "builds": [
-        { "src": "/api/index.php", "use": "vercel-php@0.8.0" },
-        { "src": "/public/**", "use": "@vercel/static" }
-    ],
+    "framework": null,
+    "functions": {
+        "api/index.php": {
+            "runtime": "vercel-php@0.8.0"
+        }
+    },
     "routes": [
         { "src": "/build/(.*)", "dest": "/public/build/$1" },
         { "src": "/favicon.ico", "dest": "/public/favicon.ico" },
         { "src": "/robots.txt", "dest": "/public/robots.txt" },
         { "src": "/(.*)", "dest": "/api/index.php" }
-    ]
+    ],
+    "env": {
+        "APP_NAME": "Yanasib",
+        "APP_ENV": "production",
+        "APP_KEY": "base64:1ijl9czLpJru9C52gFDDJ+D3rM68mlgI9Zr3bMjML5M=",
+        "APP_DEBUG": "true",
+        "APP_CONFIG_CACHE": "/tmp/storage/config.php",
+        "APP_EVENTS_CACHE": "/tmp/storage/events.php",
+        "APP_PACKAGES_CACHE": "/tmp/storage/packages.php",
+        "APP_ROUTES_CACHE": "/tmp/storage/routes.php",
+        "APP_SERVICES_CACHE": "/tmp/storage/services.php",
+        "VIEW_COMPILED_PATH": "/tmp/storage/framework/views",
+        "DB_CONNECTION": "mysql",
+        "DB_HOST": "gateway01.ap-northeast-1.prod.aws.tidbcloud.com",
+        "DB_PORT": "4000",
+        "DB_DATABASE": "sys",
+        "DB_USERNAME": "4SfpJMYeAi3wsV7.root",
+        "DB_PASSWORD": "C6ivlgzLKSaotBSZ",
+        "DB_URL": "mysql://4SfpJMYeAi3wsV7.root:C6ivlgzLKSaotBSZ@gateway01.ap-northeast-1.prod.aws.tidbcloud.com:4000/sys",
+        "SESSION_DRIVER": "cookie",
+        "CACHE_STORE": "array",
+        "QUEUE_CONNECTION": "sync",
+        "LOG_CHANNEL": "stderr",
+        "MIGRATE_SECRET": "yanasib2026"
+    }
 }
