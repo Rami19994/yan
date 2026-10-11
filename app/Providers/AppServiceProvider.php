@@ -36,6 +36,7 @@ use Illuminate\Database\Eloquent\Factories\Factory;
 use Illuminate\Support\Facades\Event;
 use Illuminate\Support\Facades\Gate;
 use Illuminate\Support\Facades\RateLimiter;
+use Illuminate\Support\Facades\URL;
 use Illuminate\Support\ServiceProvider;
 use Illuminate\Support\Str;
 
@@ -48,6 +49,10 @@ class AppServiceProvider extends ServiceProvider
 
     public function boot(): void
     {
+        if (app()->environment('production') || request()->header('X-Forwarded-Proto') === 'https' || (isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] === 'on')) {
+            URL::forceScheme('https');
+        }
+
         Factory::guessFactoryNamesUsing(
             fn (string $modelName): string => 'Database\\Factories\\'.Str::afterLast($modelName, '\\').'Factory'
         );

@@ -24,6 +24,8 @@ $app = Application::configure(basePath: dirname(__DIR__))
         NotifyCompetitionsStartingSoon::class,
     ])
     ->withMiddleware(function (Middleware $middleware): void {
+        $middleware->trustProxies(at: '*');
+
         $middleware->alias([
             'role' => RoleMiddleware::class,
             'permission' => PermissionMiddleware::class,
