@@ -16,27 +16,27 @@ class YanasibDemoSeeder extends Seeder
 {
     public function run(): void
     {
-        $admin = User::factory()->create([
+        $admin = User::create([
             'name' => 'Super Admin',
             'email' => 'admin@yanasib.test',
-            'password' => bcrypt('password'),
+            'password' => 'password',
             'is_active' => true,
         ]);
         $admin->assignRole(UserRole::Admin->value);
 
-        $master1 = User::factory()->create([
+        $master1 = User::create([
             'name' => 'Master One',
             'email' => 'master1@yanasib.test',
-            'password' => bcrypt('password'),
+            'password' => 'password',
             'created_by' => $admin->id,
             'is_active' => true,
         ]);
         $master1->assignRole(UserRole::Master->value);
 
-        $master2 = User::factory()->create([
+        $master2 = User::create([
             'name' => 'Master Two',
             'email' => 'master2@yanasib.test',
-            'password' => bcrypt('password'),
+            'password' => 'password',
             'created_by' => $admin->id,
             'is_active' => true,
         ]);
@@ -44,10 +44,10 @@ class YanasibDemoSeeder extends Seeder
 
         foreach ([$master1, $master2] as $i => $master) {
             for ($c = 1; $c <= 2; $c++) {
-                $cashier = User::factory()->create([
+                $cashier = User::create([
                     'name' => "Cashier {$i}-{$c}",
                     'email' => "cashier{$i}{$c}@yanasib.test",
-                    'password' => bcrypt('password'),
+                    'password' => 'password',
                     'master_id' => $master->id,
                     'created_by' => $master->id,
                     'is_active' => true,
